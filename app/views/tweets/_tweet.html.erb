@@ -1,0 +1,38 @@
+
+<!--部分テンプレートファイル-->
+
+
+    <div class="content_post" style="background-image: url(<%= tweet.image %>);">
+
+      <!--編集と削除ボタンの追加-->  
+        <div class="more">
+        <span><%= image_tag 'arrow_top.png' %></span>
+        <ul class="more_list">
+          <li>
+            <%= link_to '詳細', "/tweets/#{tweet.id}", method: :get %>
+          </li>
+
+        <!--ユーザーがログインしている」かつ「投稿したユーザーである投稿だけに許可」という実装-->
+        <!--ユーザーの状態によって表示を変える-->
+        <% if user_signed_in? && current_user.id == tweet.user_id %> 
+          <li>
+            <%= link_to '編集', "/tweets/#{tweet.id}/edit", method: :get %>
+          </li>
+          <li>
+            <%= link_to '削除', "/tweets/#{tweet.id}", method: :delete %>
+          </li>
+        <% end %>
+        </ul>
+      </div>
+
+      <%= simple_format(tweet.text) %>  <!--この1行の追加だけで、ツイート投稿時に改行できる。tweet.textで取得したツイートの本文をsimple_formatによって加工-->
+      
+      <p><%= tweet.text %></p>
+
+      <span class="name">
+        <a href="/users/<%= tweet.user.id %>">
+          <span>投稿者</span><%= tweet.user.nickname %>
+        </a>
+      </span>
+    </div>
+
